@@ -1,6 +1,7 @@
 package com.shopme.admin.controller;
 
 
+import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.user.ResourceNotFoundException;
 import com.shopme.admin.user.UserService;
 import com.shopme.admin.user.common.entity.Role;
@@ -8,15 +9,17 @@ import com.shopme.admin.user.common.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -51,17 +54,29 @@ public class UserController {
         return "user_form";
     }
 
-    @PostMapping("/users/save")
-    public String saveUser(User user, RedirectAttributes redirectAttributes) {
+    // @PostMapping("/users/save" )
 
-        boolean isUpdate = (user.getId() != null);
-        if (isUpdate) {
 
-        } else {
-            encodePassword(user);
+    @RequestMapping(value = "/users/save", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public String saveUser(User user, RedirectAttributes redirectAttributes
+            , @RequestParam(value = "image") MultipartFile multipartFile
+    ) throws IOException {
+
+        if (!multipartFile.isEmpty()) {
+            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            user.setPhotos(fileName);
+
+            User savedUser = userService.save(user);
+            String uploadDir = "user-photos/" + savedUser.getId();
+
+            FileUploadUtil.cleanDir(uploadDir);
+            FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+        }else{
+            if(user.getPhotos().isEmpty()){user.setPhotos(null);}
+            userService.save(user);
         }
-        logger.info(user.toString());
-        userService.save(user);
+
 
         redirectAttributes.addFlashAttribute("message", "The user has benn saved successfully");
         return "redirect:/users";

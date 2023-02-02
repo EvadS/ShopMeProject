@@ -119,4 +119,13 @@ public class User extends IdBasedEntity implements Serializable {
                 ", enabled=" + enabled +
                 '}';
     }
+
+    @Transient
+    public String photosImagePath (){
+        if(id == null || photos == null){
+            return "/images/default-user.png";
+        }
+
+        return  "/user-photos/" + this.id + "/" + this.photos;
+    }
 }
