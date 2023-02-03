@@ -9,6 +9,7 @@ import com.shopme.admin.user.common.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,11 +33,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/users")
-    public String listAll(Model model) {
-        List<User> listUsers = userService.listAll();
-
-        model.addAttribute("listUsers", listUsers);
-        return "users";
+    public String listFirstPage(Model model) {
+        return  listByPage(1, model);
     }
 
     @GetMapping("/users/new")
@@ -54,8 +52,32 @@ public class UserController {
         return "user_form";
     }
 
-    // @PostMapping("/users/save" )
 
+    @GetMapping("/users/page/{pageNum}")
+    public  String listByPage(@PathVariable(name="pageNum") int pageNum , Model model){
+
+        final Page<User> page = userService.listByPage(pageNum);
+        final List<User> listUsers = page.getContent();
+
+
+        long startCount = (pageNum -1) * UserService.USERS_PER_PAGE + 1 ;
+        long endCount = startCount +  UserService.USERS_PER_PAGE -  1;
+
+        if(endCount > page.getTotalPages()){
+            endCount = page.getTotalElements();
+        }
+
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
+
+
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("listUsers", listUsers);
+
+        return "users";
+    }
 
     @RequestMapping(value = "/users/save", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)

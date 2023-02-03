@@ -4,6 +4,9 @@ package com.shopme.admin.user;
 import com.shopme.admin.user.common.entity.Role;
 import com.shopme.admin.user.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,8 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    public  static  final  int USERS_PER_PAGE = 4;
 
     public List<User> listAll() {
         return (List<User>) userRepository.findAll();
@@ -82,20 +87,23 @@ public class UserService {
         }
     }
 
-    public void delete(Integer id ){
+    public void delete(Integer id) {
         final Long countById = userRepository.countById(id);
 
-        if(countById == null || countById==0){
-            throw new UsernameNotFoundException("Could not find user by id:"+  id);
+        if (countById == null || countById == 0) {
+            throw new UsernameNotFoundException("Could not find user by id:" + id);
         }
 
         userRepository.deleteById(id);
     }
 
-    public void updateUsed(Integer id, boolean enabled){
+    public void updateUsed(Integer id, boolean enabled) {
         userRepository.updateEnabledStatus(id, enabled);
     }
 
-
+    public Page<User> listByPage(int pageNum) {
+        Pageable pageable = PageRequest.of(pageNum-1, USERS_PER_PAGE);
+        return  userRepository.findAll( pageable);
+    }
 
 }

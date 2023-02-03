@@ -2,8 +2,10 @@ package com.shopme.admin.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.github.javafaker.Faker;
 import com.shopme.admin.user.common.entity.Role;
 import com.shopme.admin.user.common.entity.User;
 import org.junit.jupiter.api.Test;
@@ -17,12 +19,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 
-@DataJpaTest
+@DataJpaTest(showSql = false)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Rollback(value = false)
 public class UserRepositoryTests {
 
+
+
     private UserRepository repo;
+
     private TestEntityManager entityManager;
 
     @Autowired
@@ -114,4 +119,37 @@ public class UserRepositoryTests {
         //// assertThat(countby).isNotNull().isGreaterThan(0);
     }
 
+    @Test
+    public void testListFirstPage(){
+        int pageNumber = 1;
+        int pageSize = 4;
+
+        List<User> user = createUsersList(10);
+        user.forEach(entityManager::persist);
+        entityManager.flush();
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<User> page = repo.findAll(pageable);
+
+        final List<User> userList = page.getContent();
+
+        assertThat(userList.size()).isEqualTo(pageSize);
+    }
+
+    private List<User> createUsersList(int num ) {
+        List<User> userList = new ArrayList<>();
+        Faker faker = new Faker();
+
+        for(int i= 0; i< num; i++) {
+            User user = new User();
+            user.setPassword(faker.internet().password());
+            user.setFirstName(faker.name().firstName());
+            user.setLastName(faker.name().lastName());
+            user.setEmail(faker.internet().emailAddress());
+
+            userList.add(user);
+        }
+
+        return userList;
+    }
 }
