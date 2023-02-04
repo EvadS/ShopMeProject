@@ -181,9 +181,15 @@ public class UserController {
         UserCsvExporter exporter = new UserCsvExporter();
 
         exporter.export(userList, response);
-
     }
 
+    @GetMapping("/users/export/excel")
+    public void exportToExcel(HttpServletResponse response ) throws IOException {
+        final List<User> userList = userService.listAll();
+        UserExcelExporter exporter = new UserExcelExporter();
+
+        exporter.export(userList, response);
+    }
 
     private void encodePassword(User user) {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
