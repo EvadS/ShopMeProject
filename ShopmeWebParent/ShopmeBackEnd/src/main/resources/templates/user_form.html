@@ -140,7 +140,7 @@
                 <label class="col-sm-4 col-form-label">Photos:</label>
 
                 <div class="col-sm-8">
-                    <input type="hidden" th:field="*{photos} /">
+                    <input type="hidden" th:field="*{photos}" />
                     <input accept="image/png, image/jpeg" class="mb-2" id="fileImage" name="image" type="file"/>
                     <img alt="Photos preview" class="img-fluid" id="thumbnail"
                          th:src="@{${user.photosImagePath}}"/>

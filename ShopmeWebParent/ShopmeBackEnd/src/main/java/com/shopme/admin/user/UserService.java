@@ -20,16 +20,13 @@ import java.util.NoSuchElementException;
 @Transactional
 public class UserService {
 
+    public static final int USERS_PER_PAGE = 4;
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private RoleRepository roleRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    public  static  final  int USERS_PER_PAGE = 4;
 
     public List<User> listAll() {
         return (List<User>) userRepository.findAll();
@@ -102,12 +99,16 @@ public class UserService {
         userRepository.updateEnabledStatus(id, enabled);
     }
 
-    public Page<User> listByPage(int pageNum, String sortField, String sortDir) {
+    public Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
         Sort sort = Sort.by(sortField);
-        sort = sortDir.equals("asc") ? sort.ascending():sort.descending();
+        sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
 
-        Pageable pageable = PageRequest.of(pageNum-1, USERS_PER_PAGE,sort );
-        return  userRepository.findAll( pageable);
+        Pageable pageable = PageRequest.of(pageNum - 1, USERS_PER_PAGE, sort);
+        if (keyword != null) {
+            return userRepository.findAll(keyword, pageable);
+        }
+
+        return userRepository.findAll(pageable);
     }
 
 }
