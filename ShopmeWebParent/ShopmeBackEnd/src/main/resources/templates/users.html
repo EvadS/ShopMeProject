@@ -104,85 +104,13 @@
         <thead class="thead-dark">
         <tr>
 
-            <th>
-                <a th:if="${sortField != 'id'}" class="text-white"
-                   th:href="@{'/users/page/' + ${currentPage} + '?sortField=id&sortDir=' +${sortDir} + ${keyword != null ? '&keyword='+ keyword : ''}}">
-                    User Id
-                </a>
-                <a th:if="${sortField == 'id'}"  class="text-white"
-                   th:href="@{'/users/page/' + ${currentPage} + '?sortField=id&sortDir=' +${reverseSortDir} + ${keyword != null ? '&keyword='+ keyword : ''}
-                   }">
-                    User Id
-                </a>
-
-                <span th:if="${sortField == 'id'}"
-                      th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down' }">
-                </span>
-            </th>
-
+            <th th:replace="fragments::column_link('id', 'User ID')"></th>
             <th>Photos</th>
-            <th>
-                <a th:if="${sortField != 'firstName'}" class="text-white"
-                        th:href="@{'/users/page/' + ${currentPage} + '?sortField=firstName&sortDir=' +${sortDir} + ${keyword != null ? '&keyword='+ keyword : ''}}">
-                    First name
-                </a>
-                <a th:if="${sortField == 'firstName'}"  class="text-white"
-                        th:href="@{'/users/page/' + ${currentPage} + '?sortField=firstName&sortDir=' +${reverseSortDir} + ${keyword != null ? '&keyword='+ keyword : ''}}">
-                    First name
-                </a>
-
-                <span th:if="${sortField == 'firstName'}"
-                      th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down' }">
-                </span>
-            </th>
-
-            <th>
-                <a th:if="${sortField != 'lastName'}" class="text-white"
-                   th:href="@{'/users/page/' + ${currentPage} + '?sortField=lastName&sortDir=' +${sortDir}+ ${keyword != null ? '&keyword='+ keyword : ''}}">
-                    Last name
-                </a>
-                <a th:if="${sortField == 'lastName'}"  class="text-white"
-                   th:href="@{'/users/page/' + ${currentPage} + '?sortField=lastName&sortDir=' +${reverseSortDir}+ ${keyword != null ? '&keyword='+ keyword : ''}}">
-                    Last name
-                </a>
-
-                <span th:if="${sortField == 'lastName'}"
-                      th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down' }">
-                </span>
-            </th>
-
-            <th>
-                <a th:if="${sortField != 'email'}" class="text-white"
-                   th:href="@{'/users/page/' + ${currentPage} + '?sortField=email&sortDir=' +${sortDir}+ ${keyword != null ? '&keyword='+ keyword : ''}}">
-                    Email
-                </a>
-                <a th:if="${sortField == 'email'}"  class="text-white"
-                   th:href="@{'/users/page/' + ${currentPage} + '?sortField=email&sortDir=' +${reverseSortDir}+ ${keyword != null ? '&keyword='+ keyword : ''}}">
-                    Email
-                </a>
-
-                <span th:if="${sortField == 'email'}"
-                      th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down' }">
-                </span>
-            </th>
-
-
+            <th th:replace="fragments::column_link('firstName', 'First name')"></th>
+            <th th:replace="fragments::column_link('lastName', 'Last name')"></th>
+            <tH th:replace="fragments::column_link('email', 'Email')"></tH>
             <th>Roles</th>
-            <th>
-                <a class="text-white" th:href="@{'/users/page/' + ${currentPage} + '?sortField=enabled&sortDir=' +${sortDir}  + ${keyword != null ? '&keyword='+ keyword : ''} }"
-                   th:if="${sortField != 'enabled'}">
-                    Enabled
-                </a>
-                <a class="text-white" th:href="@{'/users/page/' + ${currentPage} + '?sortField=enabled&sortDir=' +${reverseSortDir} + ${keyword != null ? '&keyword='+ keyword : ''}}"
-                   th:if="${sortField == 'enabled'}">
-                    Enabled
-                </a>
-
-                <span th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down' }"
-                      th:if="${sortField == 'enabled'}">
-                </span>
-            </th>
-
+            <tH th:replace="fragments::column_link('enabled', 'Enabled')"></tH>
             <th></th>
         </tr>
         </thead>
