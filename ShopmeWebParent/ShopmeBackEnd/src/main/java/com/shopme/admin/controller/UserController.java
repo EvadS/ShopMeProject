@@ -191,6 +191,26 @@ public class UserController {
         exporter.export(userList, response);
     }
 
+
+
+    @GetMapping("/users/export/pdf")
+    public void exportToPDF(HttpServletResponse response) throws IOException {
+
+        logger.info("UserController | exportToPDF is called");
+
+        List<User> listUsers = userService.listAll();
+
+        logger.info("UserController | exportToPDF | listUsers.size() : " + listUsers.size());
+
+        UserPdfExporter exporter = new UserPdfExporter();
+
+        logger.info("UserController | exportToPDF | export is starting");
+
+        exporter.export(listUsers, response);
+
+        logger.info("UserController | exportToPDF | export completed");
+    }
+
     private void encodePassword(User user) {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
