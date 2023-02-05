@@ -2,6 +2,9 @@ package com.shopme.admin.controller;
 
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.export.UserCsvExporter;
+import com.shopme.admin.export.UserExcelExporter;
+import com.shopme.admin.export.UserPdfExporter;
 import com.shopme.admin.user.ResourceNotFoundException;
 import com.shopme.admin.user.UserService;
 import com.shopme.admin.user.common.entity.Role;
@@ -95,8 +98,7 @@ public class UserController {
     @RequestMapping(value = "/users/save", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public String saveUser(User user, RedirectAttributes redirectAttributes
-            , @RequestParam(value = "image") MultipartFile multipartFile
-    ) throws IOException {
+            , @RequestParam(value = "image") MultipartFile multipartFile) throws IOException {
 
         if (!multipartFile.isEmpty()) {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
@@ -211,8 +213,4 @@ public class UserController {
         logger.info("UserController | exportToPDF | export completed");
     }
 
-    private void encodePassword(User user) {
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-    }
 }

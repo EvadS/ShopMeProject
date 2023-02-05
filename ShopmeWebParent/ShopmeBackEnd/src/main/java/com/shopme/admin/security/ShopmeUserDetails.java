@@ -66,4 +66,12 @@ public class ShopmeUserDetails implements UserDetails {
     public  String getFullName(){
         return  this.user.getFirstName() + " " +  this.user.getLastName();
     }
+
+    public void setFirstName(String name){
+        this.user.setFirstName(name);
+    }
+
+    public void setLastName(String name){
+        this.user.setLastName(name);
+    }
 }

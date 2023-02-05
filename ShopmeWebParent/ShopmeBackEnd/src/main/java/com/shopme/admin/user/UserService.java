@@ -28,6 +28,11 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public User getByEmail(String email) {
+        return userRepository.getUserByEmail(email);
+
+    }
+
     public List<User> listAll() {
         return (List<User>) userRepository.findAll();
     }
@@ -55,10 +60,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    private void encodePassword(User user) {
-        String encoded = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encoded);
-    }
 
     // TODO: check exists by
     public boolean isEmailUnique(Integer id, String email) {
@@ -111,4 +112,32 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
+    public User updateAccount(User userInForm) {
+        User user = userRepository.findById(userInForm.getId()).get();
+
+        if (!userInForm.getPassword().isEmpty()) {
+
+            String encodePassword = encodePassword(userInForm.getPassword());
+            user.setPassword(encodePassword);
+        }
+
+        if (!userInForm.getPhotos().isEmpty()) {
+            user.setPhotos(userInForm.getPhotos());
+        }
+
+        user.setLastName(userInForm.getLastName());
+        user.setFirstName(userInForm.getFirstName());
+
+        return userRepository.save(user);
+    }
+
+    private void encodePassword(User user) {
+        String encoded = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encoded);
+    }
+
+
+    private String encodePassword(String password) {
+        return passwordEncoder.encode(password);
+    }
 }

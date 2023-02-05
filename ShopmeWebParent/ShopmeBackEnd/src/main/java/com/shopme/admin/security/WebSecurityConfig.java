@@ -49,6 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                     .loginPage("/login")
+                     .defaultSuccessUrl("/users", true)
                     .usernameParameter("email")
                 .permitAll()
                 .and().logout().permitAll()
@@ -59,6 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity webSecurity) throws Exception {
-        webSecurity.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
+        webSecurity.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**" , "/css/**");;
     }
 }

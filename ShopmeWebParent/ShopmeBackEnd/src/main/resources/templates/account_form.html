@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http:/www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Your account details')"/>
+
+<body>
+<div class="container-fluid">
+    <div th:replace="navigation:: menu"></div>
+
+
+
+    <form method="post"   enctype="multipart/form-data"
+         style="max-width: 720px; margin: 0 auto"
+          th:action="@{/account/update}"
+          th:object="${user}">
+        <input th:field="*{id}" type="hidden"/>
+        <div class="text-center">
+            <h2>Your account details</h2>
+        </div>
+
+
+        <div class="alert alert-success text-center" th:if="${message!= null}">
+            [[${message}]]
+        </div>
+
+
+        <div class="border border-secondary rounded p-3">
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Email</label>
+                <div class="col-sm-8">
+                    <input class="form-control" th:field="*{email}" type="email"
+                    readonly="readonly"/>
+                </div> n
+            </div>
+
+
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">First Name:</label>
+                <div class="col-sm-8">
+                    <input class="form-control" maxlength="45"
+                           minlength="2" required th:field="*{firstName}"/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Last Name:</label>
+                <div class="col-sm-8">
+                    <input class="form-control" maxlength="45"
+                           minlength="2" required th:field="*{lastName}"/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Password:</label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" th:field="*{password}"
+                           placeholder="Leave blank if you don;t want to change password"
+                    minlength="8" maxlength="20"
+                           oninput="checkPasswordMath(document.getElementById('confirmPassword'))"/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Confirm Password:</label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" minlength="8" maxlength="20" id="confirmPassword"
+                    oninput="checkPasswordMath(this)"/>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Assigned Roles</label>
+                <div class="col-sm-8">
+                   <span><b>[[${user.roles}]]</b></span>
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Enabled:</label>
+                <div class="col-sm-8">
+                    <input th:field="*{enabled}" type="checkbox">
+                </div>
+            </div>
+
+            <!--  *********************** File uploading  *****************************88 -->
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Photos:</label>
+
+                <div class="col-sm-8">
+                    <input type="hidden" th:field="*{photos}" />
+                    <input accept="image/png, image/jpeg" class="mb-2" id="fileImage" name="image" type="file"/>
+                    <img alt="Photos preview" class="img-fluid" id="thumbnail"
+                         th:src="@{${user.photosImagePath}}"/>
+                </div>
+            </div>
+
+
+            <div class="text-center">
+                <input class="btn btn-primary" type="submit" value="save"/>
+                <input class="btn btn-secondary" id="btnCancel" type="button" value="cancel"/>
+            </div>
+        </div>
+
+
+    </form>
+    <div>
+
+
+    </div>
+</div>
+
+<div class="modal fade text-center" id="modalDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle">Warning</h4>
+                <button class="close" data-dismiss="modal" type="button">&times</button>
+            </div>
+
+            <div class="modal-body">
+                <span id="modalBody"></span>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<<div th:replace="fragments :: footer"></div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnCancel").on("click", function () {
+            window.location = "[[@{/users}]]";
+        });
+
+
+        $("#fileImage").change(function () {
+            var fileSize = this.files[0].size;
+            console.log("File size: " + fileSize);
+            // 1024 * 11024 = 1048576
+            if (fileSize > 10485760000) {
+                this.setCustomValidity("You must choose an image less  than 1 MB");
+                this.reportValidity();
+            }
+            else {
+                this.setCustomValidity("");
+                showImageThumbnail(this);
+            }
+        });
+    });
+
+    function showImageThumbnail(fileInput) {
+        var file = fileInput.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $("#thumbnail").attr("src", e.target.result);
+        }
+
+        reader.readAsDataURL(file);
+
+    }
+
+    function checkPasswordMath(confirmPassword){
+        if(confirmPassword.value != $("#password").val()){
+            confirmPassword.setCustomValidity("Password do not match!");
+        }else{
+            confirmPassword.setCustomValidity("");
+        }
+    }
+</script>
+</body>
+
+</html>
