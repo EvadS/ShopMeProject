@@ -1,10 +1,10 @@
-package com.shopme.admin.controller;
+package com.shopme.admin.user.controller;
 
 
 import com.shopme.admin.FileUploadUtil;
-import com.shopme.admin.export.UserCsvExporter;
-import com.shopme.admin.export.UserExcelExporter;
-import com.shopme.admin.export.UserPdfExporter;
+import com.shopme.admin.user.export.UserCsvExporter;
+import com.shopme.admin.user.export.UserExcelExporter;
+import com.shopme.admin.user.export.UserPdfExporter;
 import com.shopme.admin.user.ResourceNotFoundException;
 import com.shopme.admin.user.UserService;
 import com.shopme.admin.user.common.entity.Role;
@@ -54,7 +54,7 @@ public class UserController {
         model.addAttribute("listRoles", listRoles);
 
 
-        return "user_form";
+        return "users/user_form";
     }
 
 
@@ -92,7 +92,7 @@ public class UserController {
         model.addAttribute("reverseSortDir", reverseSortDir);
         model.addAttribute("keyword", keyword);
 
-        return "users";
+        return "users/users";
     }
 
     @RequestMapping(value = "/users/save", method = RequestMethod.POST,
@@ -138,7 +138,7 @@ public class UserController {
             List<Role> listRoles = userService.listRoles();
             model.addAttribute("listRoles", listRoles);
 
-            return "user_form";
+            return "users/user_form";
         } catch (ResourceNotFoundException ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
             return "redirect:/users";

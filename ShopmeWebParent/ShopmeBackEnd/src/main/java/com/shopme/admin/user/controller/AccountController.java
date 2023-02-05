@@ -1,4 +1,4 @@
-package com.shopme.admin.controller;
+package com.shopme.admin.user.controller;
 
 
 import com.shopme.admin.FileUploadUtil;
@@ -31,7 +31,7 @@ public class AccountController   {
          User user = userService.getByEmail(email);
         model.addAttribute("user", user);
 
-        return  "account_form";
+        return  "users/account_form";
     }
 
     @RequestMapping(value = "/account/update", method = RequestMethod.POST,

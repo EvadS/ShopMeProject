@@ -1,4 +1,4 @@
-package com.shopme.admin.export;
+package com.shopme.admin.user.export;
 
 import com.shopme.admin.user.common.entity.User;
 import lombok.extern.slf4j.Slf4j;

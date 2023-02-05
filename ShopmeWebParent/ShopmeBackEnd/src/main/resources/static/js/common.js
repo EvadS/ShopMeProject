@@ -23,3 +23,11 @@ function customizeDropDownMenu(){
         location.href = this.href;
     });
 }
+
+function checkPasswordMath(confirmPassword){
+    if(confirmPassword.value != $("#password").val()){
+        confirmPassword.setCustomValidity("Password do not match!");
+    }else{
+        confirmPassword.setCustomValidity("");
+    }
+}
