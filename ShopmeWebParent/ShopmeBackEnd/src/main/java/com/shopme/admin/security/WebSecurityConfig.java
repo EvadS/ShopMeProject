@@ -43,9 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests((authz) -> authz
-//                        .anyRequest().permitAll());
+
         http.authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
@@ -53,6 +51,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/login")
                     .usernameParameter("email")
                 .permitAll()
+                .and().logout().permitAll()
+                .and().rememberMe()
+                      .tokenValiditySeconds(2*24*60*60)
         ;
     }
 
