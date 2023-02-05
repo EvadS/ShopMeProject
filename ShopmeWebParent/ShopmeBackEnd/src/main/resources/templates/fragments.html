@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http:/www.thymeleaf.org">
-<head>
+
+
+
+<head th:fragment="page_head(title)">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta name="viewpart" content="width=device-width; initial-scale=1.0, minimum-scale=1.0">
+
+
+    <title>[[${title}]]</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/fontawesome/all.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/style.css}" type="text/css"/>
+
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+    <script th:src="@{/webjars/jquery/3.4.1/jquery.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/common.js}" type="text/javascript"></script>
+
 </head>
 <body>
     <th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
@@ -11,9 +27,12 @@
             [[${columnLabel}]]
         </a>
         <span th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down' }"
-              th:if="${sortField == fieldName}">
-                        </span>
+              th:if="${sortField == fieldName}"></span>
     </th>
+
+    <div th:fragment="footer" class="text-center m-3">
+            <p>Shopme &copy; Control panel</p>
+    </div>
 
     <a th:fragment="page_link(pageNum, label)"
        class="page-link"
