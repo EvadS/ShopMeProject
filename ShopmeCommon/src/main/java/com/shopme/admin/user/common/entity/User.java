@@ -128,4 +128,9 @@ public class User extends IdBasedEntity implements Serializable {
 
         return  "/user-photos/" + this.id + "/" + this.photos;
     }
+
+    @Transient
+    public String getFullName(){
+        return this.firstName + " " + this.lastName;
+    }
 }
