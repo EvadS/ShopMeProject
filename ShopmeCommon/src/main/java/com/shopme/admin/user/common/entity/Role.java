@@ -19,10 +19,10 @@ public class Role extends IdBasedEntity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(length = 40, nullable = false, unique = true)
+	@Column(length = 100, nullable = false, unique = true)
 	private String name;
 	
-	@Column(length = 150, nullable = false)
+	@Column(length = 250, nullable = false)
 	private String description;
 
 	public Role() {

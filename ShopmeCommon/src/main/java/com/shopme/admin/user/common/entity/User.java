@@ -25,7 +25,9 @@ public class User extends IdBasedEntity implements Serializable {
     @Column(length = 64)
     private String photos;
 
-    private boolean enabled;
+
+    @Column(columnDefinition = "boolean default true", nullable = false)
+    private Boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

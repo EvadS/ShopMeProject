@@ -1,9 +1,8 @@
 # Getting Started
 
-### Reference Documentation
-For further reference, please consider the following sections:
+$2a$10$SG2kNxJtqxhqUqsoKbyEJeRinZ/izyZ2mTH8EGT.rKpkWnfl8nuuK
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.7.8/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.7.8/maven-plugin/reference/html/#build-image)
-
+att first time should be set in properties file 
+# spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
