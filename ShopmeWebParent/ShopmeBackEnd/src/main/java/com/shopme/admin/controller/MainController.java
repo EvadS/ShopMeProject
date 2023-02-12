@@ -11,6 +11,11 @@ public class MainController {
 		return "index";
 	}
 
+	@GetMapping("/category")
+	public String viewCategoryPage() {
+		return "category";
+	}
+
 	@GetMapping("/login")
 	public String viewLoginPage (){
 		return "login";
