@@ -11,18 +11,31 @@ import java.nio.file.Paths;
 public class MvcConfig implements WebMvcConfigurer {
 
     @Override
-    public  void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //to test
-        String dirName = "user-photos";
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //TODO: should be const
+        String dirName = "user-photos";
         Path userPhotosDir = Paths.get(dirName);
-
         String userPhotosPath = userPhotosDir.toFile().getAbsolutePath();
-       //WINDOWS
-        registry.addResourceHandler("/" + dirName + "/**")
-                .addResourceLocations("file:/"+ userPhotosPath + "/");
-        //LINUX
-//        registry.addResourceHandler("/" + dirName + "/**")
-//                .addResourceLocations("file:"+ userPhotosPath + "/");
+
+        String categoryImageDirName = "category-images";
+        Path categoryImageDir = Paths.get(categoryImageDirName);
+        String categoryImagePath  = categoryImageDir.toFile().getAbsolutePath();
+
+
+        if (OsUtils.isWindows()) {
+            registry.addResourceHandler("/" + dirName + "/**")
+                    .addResourceLocations("file:/" + userPhotosPath + "/");
+
+            registry.addResourceHandler("/category-images/**")
+                    .addResourceLocations("file:/" + categoryImagePath + "/");
+        }
+        //else if (OsUtils.isUnix()) {
+//            //LINUX
+//            registry.addResourceHandler("/" + dirName + "/**")
+//                    .addResourceLocations("file:" + userPhotosPath + "/");
+//
+//            registry.addResourceHandler("/" + categoryImageDirName + "/**")
+//                    .addResourceLocations("file:/" + categoryImagePath + "/");
+       // }
     }
 }

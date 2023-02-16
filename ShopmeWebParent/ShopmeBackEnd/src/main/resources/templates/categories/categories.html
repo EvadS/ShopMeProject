@@ -8,7 +8,7 @@
 
     <div>
         <h2>Manage Categories</h2>
-        <a class="fas fa-user-plus fa-2x icon-dark mr-2" th:href="@{/categories/new}"></a>
+        <a class="fas fa-folder-plus fa-2x icon-dark mr-2" th:href="@{/categories/new}"></a>
         &nbsp;&nbsp;
         <a class="fas fa-file-csv fa-2x icon-dark mr-2" th:href="@{/categories/export/csv}"></a>
         &nbsp;&nbsp;
@@ -17,15 +17,14 @@
         <a class="fas fa-file-pdf fa-2x icon-dark mr-2" th:href="@{/categories/export/pdf}"></a>
     </div>
 
-
     <!-- Search block -->
     <div>
         <form class="form-inline m-3" th:action="@{/categories/page/1}">
             <input name="sortField" th:value="${sortField}" type="hidden"/>
             <input name="sortDir" th:value="${sortDir}" type="hidden"/>
-            Filter:
+            Filter:&nbsp;
             <input class="form-control" name="keyword" required th:value="${keyword}" type="search">
-            &nbsp&nbsp;&nbsp;
+            &nbsp;&nbsp;
             <button class="btn btn-primary" type="submit">
                 <i class="fas fa-search"></i>
             </button>
@@ -35,7 +34,6 @@
             </button>
         </form>
     </div>
-
 
     <div class="alert alert-success text-center" th:if="${message!= null}">
         [[${message}]]
@@ -62,13 +60,11 @@
             <tbody>
             <tr th:each="category : ${listCategories}">
                 <td class="hideable-column">[[${category.id}]]</td>
-
                 <td>
                     <span class="fas fa-portrait fa-3x icon-silver" th:if="${category.image== null}"></span>
                     <img style="width:100px " th:if="${category.image != null}"
                          th:src="@{${category.imagePath}}"/>
                 </td>
-
                 <td>[[${category.name}]]</td>
                 <td>[[${category.alias}]]</td>
                 <td>
@@ -83,11 +79,12 @@
                     <a class="fas fa-edit fa-2x icon-green" th:href="@{'/categories/edit/' + ${category.id}}"
                        title="Edit this category"></a>
                     &nbsp;
-                    <a class="fas fa-trash fa-2x icon-dark link-delete"
-                       th:href="@{'/categories/delete/' + ${category.id}}"
-                       th:categoryId="${category.id}"
-                       title="Delete this category"></a>
-
+                    <th:block th:if="${category.hasChildren == false}">
+                        <a class="fas fa-trash fa-2x icon-dark link-delete"
+                           th:href="@{'/categories/delete/' + ${category.id}}"
+                           th:entityId="${category.id}"
+                           title="Delete this category"></a>
+                    </th:block>
                 </td>
             </tr>
             </tbody>
@@ -103,11 +100,9 @@
                 &nbsp;
             </div>
             <div class="col-8">
-
                 <div>[[${item.name}]]</div>
                 <div>[[${item.alias}]]</div>
                 <div class="mt-2">
-
                     <a class="fas fa-check-circle fa-2x icon-green"
                        th:href="@{'/categories/' + ${item.id} + '/enabled/false'}"
                        th:if="${item.enabled == true}" title="Disable category"></a>
@@ -122,7 +117,8 @@
 
                 </div>
             </div>
-            <div>&nbsp;</div>
+
+
         </div>
 
     </div>
@@ -131,6 +127,7 @@
     <div class="text-center m-1" th:if="${totalItems > 0}">
         <span>Showing categories # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]    </span>
     </div>
+
     <div class="text-center m-1" th:uunless="${totalItems > 0}">
         <span>No category found</span>
     </div>
@@ -139,22 +136,22 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center flex-wrap">
                 <li th:class="${currentPage > 1  ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(1, 'First')"></a>
+                    <a th:replace="fragments :: page_link('/categories/page/',1, 'First')"></a>
                 </li>
                 <li th:class="${currentPage > 1  ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${currentPage - 1},'Previous')"></a>
+                    <a th:replace="fragments :: page_link('/categories/page/',${currentPage - 1},'Previous')"></a>
                 </li>
 
                 <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
                     th:each="i: ${#numbers.sequence(1,totalPages)}">
-                    <a th:replace="fragments :: page_link(${i},${i})"></a>
+                    <a th:replace="fragments :: page_link('/categories/page/',${i},${i})"></a>
                 </li>
 
                 <li th:class="${currentPage < totalPages  ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${currentPage + 1 },'Next')"></a>
+                    <a th:replace="fragments :: page_link('/categories/page/',${currentPage + 1 },'Next')"></a>
                 </li>
                 <li th:class="${currentPage < totalPages  ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${totalPages },'Last')"></a>
+                    <a th:replace="fragments :: page_link('/categories/page/',${totalPages },'Last')"></a>
                 </li>
             </ul>
         </nav>
@@ -183,7 +180,7 @@
         </div>
     </div>
 
-    <<div th:replace="fragments :: footer"></div>
+    <div th:replace="fragments :: footer"></div>
 
     <script type="text/javascript">
         $(document).ready(function () {

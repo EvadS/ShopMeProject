@@ -3,18 +3,14 @@ package com.shopme.admin.category;
 
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.user.ResourceNotFoundException;
-import com.shopme.admin.user.UserService;
 import com.shopme.admin.user.common.entity.Category;
-import com.shopme.admin.user.common.entity.Role;
-import com.shopme.admin.user.common.entity.User;
-import com.shopme.admin.user.controller.UserController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -34,7 +30,10 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public String listFirstPage(Model model) {
-        return listByPage(1, model, "id", "asc",null);
+     //   return listByPage(1, model, "id", "asc",null);
+        List<Category> listCategories = categoryService.listAll();
+        model.addAttribute("listCategories",listCategories );
+        return "categories/categories";
     }
 
 
@@ -48,7 +47,6 @@ public class CategoryController {
 
         final Page<Category> page = categoryService.listByPage(pageNum, sortField, sortDir,keyword);
         final List<Category> listCategories = page.getContent();
-
 
         long startCount = (pageNum - 1) * CategoryService.CATEGORIES_PER_PAGE + 1;
         long endCount = startCount + CategoryService.CATEGORIES_PER_PAGE - 1;
@@ -77,9 +75,11 @@ public class CategoryController {
 
     @GetMapping("/categories/new")
     public String newUser(Model model) {
-        Category category = new Category();
-        category.setEnabled(true);
-        model.addAttribute("category", category);
+
+        List<Category>  listCategories  = categoryService.listCategoriesUsedInForm();
+
+        model.addAttribute("category", new Category());
+        model.addAttribute("listCategories", listCategories);
         model.addAttribute("pageTitle", "Create New Category");
 
         return "categories/category_form";
@@ -88,14 +88,14 @@ public class CategoryController {
     @RequestMapping(value = "/categories/save", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public String saveUser(Category category, RedirectAttributes redirectAttributes
-            , @RequestParam(value = "image") MultipartFile multipartFile) throws IOException {
+            , @RequestParam(value = "fileImage") MultipartFile multipartFile) throws IOException {
 
         if (!multipartFile.isEmpty()) {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             category.setImage(fileName);
 
-            Category saveCategory= categoryService.save(category);
-            String uploadDir = "category-photos/" + saveCategory.getId();
+            Category savedCategory= categoryService.save(category);
+            String uploadDir = "category-images/" + savedCategory.getId();
 
             FileUploadUtil.cleanDir(uploadDir);
             FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
@@ -106,9 +106,9 @@ public class CategoryController {
             categoryService.save(category);
         }
 
-        redirectAttributes.addFlashAttribute("message", "The user has benn saved successfully");
-
-        return getRedirectURLtoAffectedUser(category);
+        redirectAttributes.addFlashAttribute("message", "The category has benn saved successfully");
+        // return getRedirectURLtoAffectedUser(category);
+        return "redirect:/categories";
     }
 
     private String getRedirectURLtoAffectedUser(Category category) {
@@ -119,12 +119,15 @@ public class CategoryController {
     @GetMapping("/categories/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") Long id,
                              Model model, RedirectAttributes redirectAttributes) {
+        // TODO: not implement
         try {
             categoryService.delete(id);
+            String categoryDir = "../category-images" + id;
+            FileUploadUtil.removeDit(categoryDir);
+
             redirectAttributes.addFlashAttribute("message", "The category ID " + id +
                     "has been deleted successfully");
-
-        } catch (ResourceNotFoundException ex) {
+        } catch (CategoryNotFoundException  ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
 
@@ -144,5 +147,25 @@ public class CategoryController {
         redirectAttributes.addFlashAttribute("message", message);
 
         return "redirect:/categories";
+    }
+
+    @GetMapping("/categories/edit/{id}")
+    public String editCategory (@PathVariable (name="id") Long id,
+                                Model model, RedirectAttributes ra){
+        try{
+
+            Category category = categoryService.get(id);
+            List<Category> listCategories = categoryService.listCategoriesUsedInForm();
+
+            model.addAttribute("category",category);
+            model.addAttribute("listCategories", listCategories);
+            model.addAttribute("pageTitle", "Edit Category (ID:" +id +")");
+
+            return  "categories/category_form";
+        }
+        catch (CategoryNotFoundException ex){
+            ra.addFlashAttribute("message", ex.getMessage());
+            return  "redirect:/categories";
+        }
     }
 }

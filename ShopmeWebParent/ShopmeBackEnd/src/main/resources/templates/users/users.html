@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http:/www.thymeleaf.org">
-<head th:replace="fragments :: page_head('Home -  Shopme Admin')"/>
+<head th:replace="fragments :: page_head('Home - Shopme Admin')"/>
 
 <body>
 <div class="container-fluid">
@@ -8,24 +8,20 @@
 
     <div>
         <h2>Manage Users</h2>
-        <a class="fas fa-user-plus fa-2x icon-dark mr-2" th:href="@{/users/new}"></a>
-        &nbsp;&nbsp;
-        <a class="fas fa-file-csv fa-2x icon-dark mr-2" th:href="@{/users/export/csv}"></a>
-        &nbsp;&nbsp;
-        <a class="fas fa-file-excel fa-2x icon-dark mr-2" th:href="@{/users/export/excel}"></a>
-        &nbsp;&nbsp;
+        <a class="fas fa-user-plus fa-2x icon-dark mr-2" th:href="@{/users/new}"></a>        &nbsp;&nbsp;
+        <a class="fas fa-file-csv fa-2x icon-dark mr-2" th:href="@{/users/export/csv}"></a>        &nbsp;&nbsp;
+        <a class="fas fa-file-excel fa-2x icon-dark mr-2" th:href="@{/users/export/excel}"></a>        &nbsp;&nbsp;
         <a class="fas fa-file-pdf fa-2x icon-dark mr-2" th:href="@{/users/export/pdf}"></a>
     </div>
-
 
     <!--    HERE-->
     <div>
         <form class="form-inline m-3" th:action="@{/users/page/1}">
             <input name="sortField" th:value="${sortField}" type="hidden"/>
             <input name="sortDir" th:value="${sortDir}" type="hidden"/>
-            Filter:
+            Filter:&nbsp;
             <input class="form-control" name="keyword" required th:value="${keyword}" type="search">
-            &nbsp&nbsp;&nbsp;
+            &nbsp;
             <button class="btn btn-primary" type="submit">
                 <i class="fas fa-search"></i>
             </button>
@@ -144,22 +140,22 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center flex-wrap">
                 <li th:class="${currentPage > 1  ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(1, 'First')"></a>
+                    <a th:replace="fragments :: page_link('/users/page/', 1, 'First')"></a>
                 </li>
                 <li th:class="${currentPage > 1  ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${currentPage - 1},'Previous')"></a>
+                    <a th:replace="fragments :: page_link('/users/page/',${currentPage - 1},'Previous')"></a>
                 </li>
 
                 <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
                     th:each="i: ${#numbers.sequence(1,totalPages)}">
-                    <a th:replace="fragments :: page_link(${i},${i})"></a>
+                    <a th:replace="fragments :: page_link('/users/page/',${i},${i})"></a>
                 </li>
 
                 <li th:class="${currentPage < totalPages  ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${currentPage + 1 },'Next')"></a>
+                    <a th:replace="fragments :: page_link('/users/page/',${currentPage + 1 },'Next')"></a>
                 </li>
                 <li th:class="${currentPage < totalPages  ? 'page-item' : 'page-item disabled'}">
-                    <a th:replace="fragments :: page_link(${totalPages },'Last')"></a>
+                    <a th:replace="fragments :: page_link('/users/page/',${totalPages },'Last')"></a>
                 </li>
             </ul>
         </nav>

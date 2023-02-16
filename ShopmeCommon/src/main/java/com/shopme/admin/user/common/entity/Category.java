@@ -23,6 +23,16 @@ public class Category {
 
     private boolean enabled;
 
+    public Category() {
+    }
+
+    public Category(Long id, String name) {
+        this.id = id;
+        this.name = name;
+        this.alias = name;
+        this.image = "default.png";
+    }
+
     @OneToOne
     @JoinColumn(name="parent_id")
     private Category parent;
@@ -86,12 +96,53 @@ public class Category {
         this.children = children;
     }
 
+    public static  Category copyIdAndName(Long id, String name){
+        Category category = new Category();
+        category.setId(id);
+        category.setName(name);
+        category.setAlias(name);
+
+        return  category;
+    }
+
+    public static  Category copyFull (Category category){
+        Category copyCategory = new Category();
+
+        copyCategory.setId(category.getId());
+        copyCategory.setName(category.getName());
+        copyCategory.setImage(category.getImage());
+        copyCategory.setAlias(category.getAlias());
+        copyCategory.setEnabled(category.isEnabled());
+        copyCategory.setHasChildren(category.getChildren().size() > 0);
+
+        return copyCategory;
+    }
+
+    public static  Category copyFull (Category category, String name){
+        Category copyCategory = Category.copyFull(category);
+        copyCategory.setName(name);
+
+        return copyCategory;
+    }
+
     @Transient
-    public String imagePath (){
+    public String getImagePath (){
         if(id == null || image == null){
-            return "/images/default-user.png";
+            return "/images/image-tumbnail.png";
         }
 
-        return  "/category-photos/" + this.id + "/" + this.image;
+        return  "/category-images/" + this.id + "/" + this.image;
+    }
+
+
+    @Transient
+    private boolean hasChildren;
+
+    public boolean isHasChildren() {
+        return hasChildren;
+    }
+
+    public void setHasChildren(boolean hasChildren) {
+        this.hasChildren = hasChildren;
     }
 }

@@ -28,7 +28,7 @@ public class AccountController   {
                               Model model){
         String email = loggedUser.getUsername();
 
-         User user = userService.getByEmail(email);
+        User user = userService.getByEmail(email);
         model.addAttribute("user", user);
 
         return  "users/account_form";
@@ -40,7 +40,7 @@ public class AccountController   {
                            @RequestParam(value = "image") MultipartFile multipartFile,
                            @AuthenticationPrincipal ShopmeUserDetails loggedUser) throws IOException {
 
-        if (!multipartFile.isEmpty()) {
+        if (multipartFile!= null &&  !multipartFile.isEmpty()) {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
             user.setPhotos(fileName);
 

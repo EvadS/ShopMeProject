@@ -34,9 +34,9 @@
             <p>Shopme &copy; Control panel</p>
     </div>
 
-    <a th:fragment="page_link(pageNum, label)"
+    <a th:fragment="page_link(baseApi, pageNum, label)"
        class="page-link"
-       th:href="@{'/users/page/' + ${pageNum} + '?sortField='+ ${sortField} + '&sortDir=' + ${sortDir}+ ${keyword != null ? '&keyword='+ keyword : ''}}">
+       th:href="@{${baseApi} + ${pageNum} + '?sortField='+ ${sortField} + '&sortDir=' + ${sortDir}+ ${keyword != null ? '&keyword='+ keyword : ''}}">
         [[${label}]]
     </a>
 

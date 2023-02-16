@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.logging.Logger;
 
 @Slf4j
 public class FileUploadUtil {
@@ -45,6 +46,15 @@ public class FileUploadUtil {
             );
         } catch (IOException ex) {
             log.error("Could not list directory: {}", dirPath);
+        }
+    }
+
+    public  static void removeDit(String dir){
+        cleanDir(dir);
+        try {
+            Files.delete(Paths.get(dir));
+        }catch (IOException e){
+            log.error("Could not remove directory: "+ dir);
         }
     }
 }
