@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 @Slf4j
 public class FileUploadUtil {
 
+
+
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
 
         Path uploadPath = Paths.get(uploadDir);
@@ -49,12 +51,21 @@ public class FileUploadUtil {
         }
     }
 
-    public  static void removeDit(String dir){
+    public static void removeDir(String dir) {
+
+        log.info("FileUploadUtil | removeDir is started");
+
+        log.info("FileUploadUtil | removeDir | dir : " + dir);
+
         cleanDir(dir);
+
+        log.info("FileUploadUtil | cleanDir(dir) is over");
+
         try {
             Files.delete(Paths.get(dir));
-        }catch (IOException e){
-            log.error("Could not remove directory: "+ dir);
+        } catch (IOException e) {
+            log.error("Could not remove directory: " + dir);
         }
+
     }
 }

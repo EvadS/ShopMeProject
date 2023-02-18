@@ -28,4 +28,3 @@ function showImageThumbnail(fileInput) {
 
     reader.readAsDataURL(file);
 }
-

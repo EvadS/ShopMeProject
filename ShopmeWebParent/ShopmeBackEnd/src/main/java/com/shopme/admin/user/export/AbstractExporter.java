@@ -3,6 +3,9 @@ package com.shopme.admin.user.export;
 import org.springframework.http.HttpHeaders;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,17 +18,19 @@ public class AbstractExporter {
      * @param contentType
      * @param extension
      */
-    public void setResponseHeader(HttpServletResponse response, String contentType, String extension) {
+    public void setResponseHeader(HttpServletResponse response, String contentType,
+                                  String extension, String prefix) throws IOException {
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String timestamp = dateFormatter.format(new Date());
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-
-        String timestamp = dateFormat.format(new Date());
-        String fileName = "user_" + timestamp + extension;
+        String fileName = URLEncoder.encode(prefix + timestamp + extension, "utf-8");
 
         response.setContentType(contentType);
-        String headerKey = HttpHeaders.CONTENT_DISPOSITION;
-        String headerValue = "attachment; filename" + fileName;
+        response.setCharacterEncoding("UTF-8");
 
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=" + fileName;
         response.setHeader(headerKey, headerValue);
+
     }
 }

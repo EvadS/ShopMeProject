@@ -2,9 +2,6 @@
 <html xmlns:th="http:/www.thymeleaf.org">
 <head th:replace="fragments :: page_head(${pageTitle})"/>
 
-<head th:replace="fragments :: page_head(${pageTitle})"/>
-
-
 <body>
 <div class="container-fluid">
     <div th:replace="navigation::menu"></div>
@@ -14,9 +11,9 @@
     </div>
 
     <!--HERE -->
-    <form method="post"   enctype="multipart/form-data"
-          onsubmit="" style="max-width: 720px; margin: 0 auto"
-          th:action="@{/categories/save}"
+    <form th:action="@{/categories/save}" method="post"  enctype="multipart/form-data"
+          onsubmit="return checkUnique(this);" style="max-width: 720px; margin: 0 auto"
+
           th:object="${category}">
         <input th:field="*{id}" type="hidden"/>
         <div class="border border-secondary rounded p-3">
@@ -76,40 +73,45 @@
                 <input class="btn btn-secondary" id="btnCancel" type="button" value="cancel"/>
             </div>
         </div>
-
-
     </form>
-    <div>
 
-
-    </div>
+    <div th:replace="modal_fragments :: modal_dialog"></div>
+    <div th:replace="fragments :: footer"></div>
 </div>
-
-<div class="modal fade text-center" id="modalDialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="modalTitle">Warning</h4>
-                <button class="close" data-dismiss="modal" type="button">&times</button>
-            </div>
-
-            <div class="modal-body">
-                <span id="modalBody"></span>
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-danger" data-dismiss="modal" type="button">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div th:replace="fragments :: footer"></div>
-<script th:src="@{/js/common-form.js}"></script>
 
 
 <script type="text/javascript">
     moduleURL = "[[@{/categories}]]";
+
+   function checkUnique(form){
+       catId = $("#id").val();
+       catName = $("#name").val();
+       catAlias = $("#alias").val();
+
+       csrfValue = $("input[name='_csrf']").val();
+       url = "[[@{/categories/check_unique}]]";
+       params= {id: catId, name: catName, alias: catAlias, _csrf:csrfValue};
+
+       $.post(url, params, function (response) {
+           if(response == "OK"){
+               form.submit();
+           }
+           else if  (response == "DuplicateName"){
+               showWarningModal("There is another category having same name "+ catName);
+           }
+           else if  (response == "DuplicateAlias"){
+               showWarningModal("There is another category having same alias "+ catAlias);
+           }else{
+               showErrorModal("Unknown response from server");
+           }
+
+       }).fail(function(){
+           showErrorModal("Could not connect to server");
+       });
+
+       return false;
+   }
 </script>
+<script th:src="@{/js/common-form.js}"></script>
 </body>
 </html>

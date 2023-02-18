@@ -5,7 +5,7 @@ import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.user.export.UserCsvExporter;
 import com.shopme.admin.user.export.UserExcelExporter;
 import com.shopme.admin.user.export.UserPdfExporter;
-import com.shopme.admin.user.ResourceNotFoundException;
+import com.shopme.admin.error.ResourceNotFoundException;
 import com.shopme.admin.user.UserService;
 import com.shopme.admin.user.common.entity.Role;
 import com.shopme.admin.user.common.entity.User;

@@ -26,6 +26,12 @@ public class Category {
     public Category() {
     }
 
+    public Category(Long id, String name, String alias) {
+        this.id = id;
+        this.name = name;
+        this.alias = alias;
+    }
+
     public Category(Long id, String name) {
         this.id = id;
         this.name = name;
@@ -39,6 +45,14 @@ public class Category {
 
     @OneToMany(mappedBy = "parent")
     private Set<Category> children = new HashSet<>();
+
+    public static Category copyIdAndName(Category category) {
+        Category copyCategory = new Category();
+        copyCategory.setId(category.getId());
+        copyCategory.setName(category.getName());
+
+        return copyCategory;
+    }
 
     public Long getId() {
         return id;

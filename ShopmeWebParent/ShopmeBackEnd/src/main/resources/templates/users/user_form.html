@@ -66,7 +66,6 @@
                                type="checkbox"> - <small>[[${role.description}]]</small>
                         <br/>
                     </th:block>
-
                 </div>
             </div>
 
@@ -80,7 +79,6 @@
             <!--  *********************** File uploading  *****************************88 -->
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Photos:</label>
-
                 <div class="col-sm-8">
                     <input type="hidden" th:field="*{photos}" />
                     <input accept="image/png, image/jpeg" class="mb-2" id="fileImage" name="image" type="file"/>
@@ -89,41 +87,18 @@
                 </div>
             </div>
 
-
             <div class="text-center">
                 <input class="btn btn-primary" type="submit" value="save"/>
                 <input class="btn btn-secondary" id="btnCancel" type="button" value="cancel"/>
             </div>
         </div>
-
-
     </form>
-    <div>
 
-
-    </div>
 </div>
-
-<div class="modal fade text-center" id="modalDialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="modalTitle">Warning</h4>
-                <button class="close" data-dismiss="modal" type="button">&times</button>
-            </div>
-
-            <div class="modal-body">
-                <span id="modalBody"></span>
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-danger" data-dismiss="modal" type="button">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+<div th:replace="modal_fragments :: modal_dialog"></div>
 
 <div th:replace="fragments :: footer"></div>
+
 <script th:src="@{/js/common-form.js}"></script>
 <script type="text/javascript">
     moduleURL = "[[@{/}]]";
@@ -139,26 +114,17 @@
             if (response == "OK")
                 form.submit();
             else if (response == "Duplicated") {
-                showModalDialog("warning", "There is another user having the email '" + userEmail + "'");
+                showWarningModal("There is another user having the email '" + userEmail + "'");
             } else {
-                showModalDialog("Error", "Response from server");
+                showErrorModal( "Response from server");
             }
 
         }).fail(function () {
-            showModalDialog("Error", "Could not connect to the server");
+            showErrorModal("Could not connect to the server");
         });
 
         return false;
     }
-
-    function showModalDialog(title, message) {
-        $("#modalTitle").text(title);
-        $("#modalBody").text(message);
-
-        $("#modalDialog").modal();
-
-    }
-
 </script>
 
 </body>

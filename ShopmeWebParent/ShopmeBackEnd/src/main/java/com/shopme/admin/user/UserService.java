@@ -1,6 +1,7 @@
 package com.shopme.admin.user;
 
 
+import com.shopme.admin.error.ResourceNotFoundException;
 import com.shopme.admin.user.common.entity.Role;
 import com.shopme.admin.user.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
