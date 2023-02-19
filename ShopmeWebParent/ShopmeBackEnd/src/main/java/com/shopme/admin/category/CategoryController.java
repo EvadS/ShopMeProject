@@ -116,7 +116,7 @@ public class CategoryController {
             category.setImage(fileName);
 
             Category savedCategory = categoryService.save(category);
-            String uploadDir = "../category-images/" + savedCategory.getId();
+            String uploadDir = "category-images/" + savedCategory.getId();
 
             LOGGER.info("CategoryController | saveCategory | savedCategory : " + savedCategory.toString());
             LOGGER.info("CategoryController | saveCategory | uploadDir : " + uploadDir);
