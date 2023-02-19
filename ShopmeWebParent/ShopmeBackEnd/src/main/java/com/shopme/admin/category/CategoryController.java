@@ -161,19 +161,55 @@ public class CategoryController {
 
     @GetMapping("/categories/export/csv")
     public void exportToCSV(HttpServletResponse response) throws IOException {
+
         LOGGER.info("CategoryController | exportToCSV is started");
+
+        List<Category> listCategories = categoryService.listCategoriesUsedInForm();
+
+        LOGGER.info("CategoryController | exportToCSV | listCategories : " + listCategories.toString());
+
+        CategoryCsvExporter exporter = new CategoryCsvExporter();
+        exporter.export(listCategories, response);
+
+        LOGGER.info("CategoryController | exportToCSV | export completed");
 
     }
 
     @GetMapping("/categories/export/excel")
     public void exportToExcel(HttpServletResponse response) throws IOException {
-        LOGGER.info("CategoryController | exportToExcel is started");
+
+        LOGGER.info("CategoryController | exportToExcel is called");
+
+        List<Category> listCategories = categoryService.listAll();
+
+        LOGGER.info("CategoryController | exportToExcel | categoryService.listAll() : " + listCategories.size());
+
+        CategoryExcelExporter exporter = new CategoryExcelExporter();
+
+        LOGGER.info("CategoryController | exportToExcel | export is starting");
+
+        exporter.export(listCategories, response);
+
+        LOGGER.info("CategoryController | exportToExcel | export completed");
+
     }
 
     @GetMapping("/categories/export/pdf")
     public void exportToPDF(HttpServletResponse response) throws IOException {
 
-        LOGGER.info("CategoryController | exportToPDF is started");
+        LOGGER.info("CategoryController | exportToPDF is called");
+
+        List<Category> listCategories = categoryService.listAll();
+
+        LOGGER.info("CategoryController | exportToPDF | categoryService.listAll() : " + listCategories.size());
+
+        CategoryPdfExporter exporter = new CategoryPdfExporter();
+
+        LOGGER.info("CategoryController | exportToPDF | export is starting");
+
+        exporter.export(listCategories, response);
+
+        LOGGER.info("CategoryController | exportToPDF | export completed");
 
     }
 

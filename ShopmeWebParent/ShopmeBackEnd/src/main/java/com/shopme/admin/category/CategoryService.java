@@ -20,6 +20,16 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    public List<Category> listAll() {
+
+        Sort firstNameSorting =  Sort.by("name").ascending();
+
+        List<Category> categoryList = new ArrayList<>();
+        categoryRepository.findAll(firstNameSorting).forEach(categoryList::add);
+        return categoryList;
+    }
+
+
     public List<Category> listByPage(CategoryPageInfo pageInfo, int pageNum, String sortDir,
                                      String keyword) {
         Sort sort = Sort.by("name");
@@ -31,8 +41,6 @@ public class CategoryService {
         }
 
         Pageable pageable = PageRequest.of(pageNum - 1, ROOT_CATEGORIES_PER_PAGE, sort);
-
-
         Page<Category> pageCategories = null;
 
         if (keyword != null && !keyword.isEmpty()) {
