@@ -3,29 +3,26 @@ package com.shopme.admin.brands;
 import com.shopme.admin.error.BrandNotFoundException;
 import com.shopme.admin.user.common.entity.Brand;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 @Service
 public class BrandService implements IBrandService {
+
+    public static final int BRANDS_PER_PAGE = 10;
 
     @Autowired
     private BrandRepository repo;
 
     @Override
     public List<Brand> listAll() {
- //        List<Brand> brandsList = StreamSupport.stream(iterable.spliterator(), false).map(i -> {
-//            i.setCategories(new HashSet<>());
-//            return  i;
-//        }).collect(Collectors.toList());
-
-        return  ((List<Brand>)repo.findAll());
+        return ((List<Brand>) repo.findAll());
     }
 
     @Override
@@ -67,5 +64,21 @@ public class BrandService implements IBrandService {
         }
 
         return "OK";
+    }
+
+
+    @Override
+    public Page<Brand> listByPage(int pageNum, String sortField, String sortDir, String keyword) {
+        Sort sort = Sort.by(sortField);
+
+        sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
+
+        Pageable pageable = PageRequest.of(pageNum - 1, BRANDS_PER_PAGE, sort);
+
+        if (keyword != null) {
+            return repo.findAll(keyword, pageable);
+        }
+
+        return repo.findAll(pageable);
     }
 }

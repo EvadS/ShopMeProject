@@ -20,17 +20,5 @@ class BrandRepositoryTest {
     @Autowired
     private BrandRepository repo;
 
-   // @Test
-    public void testCreateBrand1(){
-        Category laptop = new Category(6L);
-        Brand acer = new Brand("Acer");
 
-        acer.getCategory().add(laptop);
-
-        Brand savedBrand = repo.save(acer);
-        assertThat(savedBrand).isNotNull();
-        assertThat(savedBrand.getId()).isGreaterThan(0);
-
-
-    }
 }
