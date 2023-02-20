@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="categories")
+@Table(name = "categories")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +22,13 @@ public class Category {
     private String image;
 
     private boolean enabled;
+    @OneToOne
+    @JoinColumn(name = "parent_id")
+    private Category parent;
+    @OneToMany(mappedBy = "parent")
+    private Set<Category> children = new HashSet<>();
+    @Transient
+    private boolean hasChildren;
 
     public Category() {
     }
@@ -39,17 +46,43 @@ public class Category {
         this.image = "default.png";
     }
 
-    @OneToOne
-    @JoinColumn(name="parent_id")
-    private Category parent;
-
-    @OneToMany(mappedBy = "parent")
-    private Set<Category> children = new HashSet<>();
+    public Category(Long id) {
+        this.id = id;
+    }
 
     public static Category copyIdAndName(Category category) {
         Category copyCategory = new Category();
         copyCategory.setId(category.getId());
         copyCategory.setName(category.getName());
+
+        return copyCategory;
+    }
+
+    public static Category copyIdAndName(Long id, String name) {
+        Category category = new Category();
+        category.setId(id);
+        category.setName(name);
+        category.setAlias(name);
+
+        return category;
+    }
+
+    public static Category copyFull(Category category) {
+        Category copyCategory = new Category();
+
+        copyCategory.setId(category.getId());
+        copyCategory.setName(category.getName());
+        copyCategory.setImage(category.getImage());
+        copyCategory.setAlias(category.getAlias());
+        copyCategory.setEnabled(category.isEnabled());
+        copyCategory.setHasChildren(category.getChildren().size() > 0);
+
+        return copyCategory;
+    }
+
+    public static Category copyFull(Category category, String name) {
+        Category copyCategory = Category.copyFull(category);
+        copyCategory.setName(name);
 
         return copyCategory;
     }
@@ -110,47 +143,14 @@ public class Category {
         this.children = children;
     }
 
-    public static  Category copyIdAndName(Long id, String name){
-        Category category = new Category();
-        category.setId(id);
-        category.setName(name);
-        category.setAlias(name);
-
-        return  category;
-    }
-
-    public static  Category copyFull (Category category){
-        Category copyCategory = new Category();
-
-        copyCategory.setId(category.getId());
-        copyCategory.setName(category.getName());
-        copyCategory.setImage(category.getImage());
-        copyCategory.setAlias(category.getAlias());
-        copyCategory.setEnabled(category.isEnabled());
-        copyCategory.setHasChildren(category.getChildren().size() > 0);
-
-        return copyCategory;
-    }
-
-    public static  Category copyFull (Category category, String name){
-        Category copyCategory = Category.copyFull(category);
-        copyCategory.setName(name);
-
-        return copyCategory;
-    }
-
     @Transient
-    public String getImagePath (){
-        if(id == null || image == null){
+    public String getImagePath() {
+        if (id == null || image == null) {
             return "/images/image-tumbnail.png";
         }
 
-        return  "/category-images/" + this.id + "/" + this.image;
+        return "/category-images/" + this.id + "/" + this.image;
     }
-
-
-    @Transient
-    private boolean hasChildren;
 
     public boolean isHasChildren() {
         return hasChildren;
@@ -158,5 +158,10 @@ public class Category {
 
     public void setHasChildren(boolean hasChildren) {
         this.hasChildren = hasChildren;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" + "name='" + name + '\'' + '}';
     }
 }

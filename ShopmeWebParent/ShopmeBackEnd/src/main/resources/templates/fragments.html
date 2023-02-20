@@ -58,14 +58,11 @@
        th:title="'Enable this ' + ${entityName}"
     ></a>
 </div>
-
 <!-- STATUS END -->
 
-
 <!-- EDIT -->
-
 <div th:fragment="edit(entityName, editURL)" th:remove="tag">
-    <a class="fas fa-edit fa-2x icon-green" th:href="@{${editURL}}"
+    <a style="text-decoration: none;" class="fas fa-edit fa-2x icon-green" th:href="@{${editURL}}"
        th:title="'Edit this ' + ${entityName}"></a>
 </div>
 
