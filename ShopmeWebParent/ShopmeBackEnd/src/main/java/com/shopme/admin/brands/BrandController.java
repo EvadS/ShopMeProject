@@ -139,7 +139,6 @@ public class BrandController {
 
             LOGGER.info("BrandController | deleteBrand | FileUploadUtil.removeDir is over");
 
-
             redirectAttributes.addFlashAttribute("messageSuccess",
                     "The brand ID " + id + " has been deleted successfully");
         } catch (BrandNotFoundException ex) {
