@@ -10,9 +10,9 @@ public interface IBrandService {
 
     Brand save(Brand brand);
 
-    Brand get(Long id) throws BrandNotFoundException;
+    Brand get(Integer id) throws BrandNotFoundException;
 
-    void delete(Long id) throws BrandNotFoundException;
+    void delete(Integer id) throws BrandNotFoundException;
 
      String checkUnique(Integer id, String name);
 }

@@ -33,8 +33,6 @@ public class BrandController {
         this.categoryService = categoryService;
     }
 
-
-
     @GetMapping("/brands")
     public String listAll(Model model) {
         List<Brand> listBrands = brandService.listAll();
@@ -62,7 +60,7 @@ public class BrandController {
             brand.setLogo(fileName);
 
             Brand savedBrand = brandService.save(brand);
-            String uploadDir = "../brand-logos/" + savedBrand.getId();
+            String uploadDir = "brand-logos/" + savedBrand.getId();
 
             FileUploadUtil.cleanDir(uploadDir);
             FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
@@ -76,8 +74,9 @@ public class BrandController {
     }
 
     @GetMapping("/brands/edit/{id}")
-    public String editBrand(@PathVariable(name = "id") Long id, Model model,
+    public String editBrand(@PathVariable(name = "id") Integer id, Model model,
                             RedirectAttributes ra) {
+
         try {
             Brand brand = brandService.get(id);
             List<Category> listCategories = categoryService.listCategoriesUsedInForm();
@@ -94,12 +93,12 @@ public class BrandController {
     }
 
     @GetMapping("/brands/delete/{id}")
-    public String deleteBrand(@PathVariable(name = "id") Long id,
+    public String deleteBrand(@PathVariable(name = "id") Integer id,
                               Model model,
                               RedirectAttributes redirectAttributes) {
         try {
             brandService.delete(id);
-            String brandDir = "../brand-logos/" + id;
+            String brandDir = "brand-logos/" + id;
             FileUploadUtil.removeDir(brandDir);
 
             redirectAttributes.addFlashAttribute("messageSuccess",

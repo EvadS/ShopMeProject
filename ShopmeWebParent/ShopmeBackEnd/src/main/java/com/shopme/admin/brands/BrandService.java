@@ -16,9 +16,6 @@ import java.util.stream.StreamSupport;
 public class BrandService implements IBrandService {
 
     @Autowired
-    private BrandRepository repository;
-
-    @Autowired
     private BrandRepository repo;
 
     @Override
@@ -39,7 +36,7 @@ public class BrandService implements IBrandService {
     }
 
     @Override
-    public Brand get(Long id) throws BrandNotFoundException {
+    public Brand get(Integer id) throws BrandNotFoundException {
         try {
             return repo.findById(id).get();
         } catch (NoSuchElementException ex) {
@@ -48,7 +45,7 @@ public class BrandService implements IBrandService {
     }
 
     @Override
-    public void delete(Long id) throws BrandNotFoundException {
+    public void delete(Integer id) throws BrandNotFoundException {
         Long countById = repo.countById(id);
 
         if (countById == null || countById == 0) {

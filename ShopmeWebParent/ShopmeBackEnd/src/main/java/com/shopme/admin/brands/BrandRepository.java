@@ -8,9 +8,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BrandRepository extends PagingAndSortingRepository<Brand, Long> {
+public interface BrandRepository extends PagingAndSortingRepository<Brand, Integer> {
 
-     Long countById(Long id);
+     Long countById(Integer id);
 
      Brand findByName(String name);
 

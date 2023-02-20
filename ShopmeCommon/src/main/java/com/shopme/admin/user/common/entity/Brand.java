@@ -84,7 +84,7 @@ public class Brand {
 
     @Transient
     public String getLogoPath() {
-        if (this.id == null || StringUtils.hasLength(this.logo) )
+        if (this.id == null || !StringUtils.hasLength(this.logo) )
             return "/images/image-thumbnail.png";
 
         return "/brand-logos/" + this.id + "/" + this.logo;

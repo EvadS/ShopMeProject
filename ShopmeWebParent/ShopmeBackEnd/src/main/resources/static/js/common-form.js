@@ -22,6 +22,7 @@ function showImageThumbnail(fileInput) {
     var file = fileInput.files[0];
     var reader = new FileReader();
 
+    console.log("Show thumbnail....");
     reader.onload = function (e) {
         $("#thumbnail").attr("src", e.target.result);
     }
