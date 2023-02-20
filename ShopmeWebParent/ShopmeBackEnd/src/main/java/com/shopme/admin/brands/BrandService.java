@@ -20,14 +20,12 @@ public class BrandService implements IBrandService {
 
     @Override
     public List<Brand> listAll() {
-        Iterable<Brand> iterable = repo.findAll();
+ //        List<Brand> brandsList = StreamSupport.stream(iterable.spliterator(), false).map(i -> {
+//            i.setCategories(new HashSet<>());
+//            return  i;
+//        }).collect(Collectors.toList());
 
-        List<Brand> brandsList = StreamSupport.stream(iterable.spliterator(), false).map(i -> {
-            i.setCategories(new HashSet<>());
-            return  i;
-        }).collect(Collectors.toList());
-
-        return  brandsList;
+        return  ((List<Brand>)repo.findAll());
     }
 
     @Override
